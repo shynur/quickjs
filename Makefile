@@ -111,7 +111,6 @@ ifdef CONFIG_M32
 		LDFLAGS+=-m32
 	endif
 endif
-CFLAGS+=-fwrapv # ensure that signed overflows behave as expected
 DEFINES:=-D_GNU_SOURCE -DCONFIG_VERSION=\"$(shell cat VERSION)\"
 ifdef CONFIG_WIN32
 	DEFINES+=-D__USE_MINGW_ANSI_STDIO # for standard snprintf behavior

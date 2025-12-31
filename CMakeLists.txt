@@ -5,12 +5,9 @@ project(QuickJS
 )
 
 #------- Configuration --------
-if(MSVC)
-    # Default is OK.
-else()
-    add_compile_options(-fwrapv)
-endif()
+add_compile_options(-fwrapv)
 add_compile_definitions(CONFIG_VERSION=\"${PROJECT_VERSION}\")
+add_compile_definitions(_GNU_SOURCE)
 
 # ------- libquickjs -------------
 add_library(quickjs)
@@ -28,6 +25,8 @@ target_link_libraries(quickjs
         dtoa
         regexp
         unicode
+    INTERFACE
+        m
 )
 
 # --------- executables ---------
@@ -36,7 +35,7 @@ target_sources(qjsc
     PRIVATE
         qjsc.c
 )
-target_link_directories(qjsc
+target_link_libraries(qjsc
     PRIVATE
         quickjs
         cutils
@@ -48,14 +47,14 @@ target_sources(qjs
         qjs.c
         repl.c
 )
-target_link_directories(qjs
+target_link_libraries(qjs
     PRIVATE
         quickjs
         cutils
 )
 
 # --------- misc ---------
-add_library(cutils OBJECT) # TODO: Leave <LIB_TYPE> for cmake/user to decide?
+add_library(cutils)
 target_sources(cutils
     PRIVATE
         cutils.c
@@ -80,7 +79,12 @@ target_sources(dtoa
         FILE_SET HEADERS
         FILES    dtoa.h
 )
-target_link_libraries(dtoa PRIVATE cutils)
+target_link_libraries(dtoa
+    PRIVATE
+        cutils
+    INTERFACE
+        m
+)
 
 add_library(regexp)
 target_sources(regexp
