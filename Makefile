@@ -1,32 +1,8 @@
-#
-# QuickJS Javascript Engine
-#
-# Copyright (c) 2017-2021 Fabrice Bellard
-# Copyright (c) 2017-2021 Charlie Gordon
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-
 ifeq ($(shell uname -s),Darwin)
-CONFIG_DARWIN=y
+	CONFIG_DARWIN=y
 endif
 ifeq ($(shell uname -s),FreeBSD)
-CONFIG_FREEBSD=y
+	CONFIG_FREEBSD=y
 endif
 # Windows cross compilation from Linux
 # May need to have libwinpthread*.dll alongside the executable
@@ -35,14 +11,11 @@ endif
 #CONFIG_WIN32=y
 # use link time optimization (smaller and faster executables but slower build)
 #CONFIG_LTO=y
-# consider warnings as errors (for development)
-#CONFIG_WERROR=y
 # force 32 bit build on x86_64
 #CONFIG_M32=y
 # cosmopolitan build (see https://github.com/jart/cosmopolitan)
 #CONFIG_COSMO=y
 
-# installation directory
 PREFIX?=/usr/local
 
 # use the gprof profiler
@@ -61,184 +34,172 @@ TEST262_SINCE?=2025-09-01
 OBJDIR=.obj
 
 ifdef CONFIG_ASAN
-OBJDIR:=$(OBJDIR)/asan
+	OBJDIR:=$(OBJDIR)/asan
 endif
 ifdef CONFIG_MSAN
-OBJDIR:=$(OBJDIR)/msan
+	OBJDIR:=$(OBJDIR)/msan
 endif
 ifdef CONFIG_UBSAN
-OBJDIR:=$(OBJDIR)/ubsan
+	OBJDIR:=$(OBJDIR)/ubsan
 endif
 
 ifdef CONFIG_DARWIN
 # use clang instead of gcc
-CONFIG_CLANG=y
-CONFIG_DEFAULT_AR=y
+	CONFIG_CLANG=y
+	CONFIG_DEFAULT_AR=y
 endif
 ifdef CONFIG_FREEBSD
 # use clang instead of gcc
-CONFIG_CLANG=y
-CONFIG_DEFAULT_AR=y
-CONFIG_LTO=
+	CONFIG_CLANG=y
+	CONFIG_DEFAULT_AR=y
+	CONFIG_LTO=
 endif
 
 ifdef CONFIG_WIN32
-  ifdef CONFIG_M32
-    CROSS_PREFIX?=i686-w64-mingw32-
-  else
-    CROSS_PREFIX?=x86_64-w64-mingw32-
-  endif
-  EXE=.exe
+  	ifdef CONFIG_M32
+    	CROSS_PREFIX?=i686-w64-mingw32-
+  	else
+    	CROSS_PREFIX?=x86_64-w64-mingw32-
+  	endif
+  	EXE=.exe
 else ifdef MSYSTEM
-  CONFIG_WIN32=y
-  CROSS_PREFIX?=
-  EXE=.exe
+  	CONFIG_WIN32=y
+  	CROSS_PREFIX?=
+  	EXE=.exe
 else
-  CROSS_PREFIX?=
-  EXE=
+  	CROSS_PREFIX?=
+  	EXE=
 endif
 
 ifdef CONFIG_CLANG
-  HOST_CC=clang
-  CC=$(CROSS_PREFIX)clang
-  CFLAGS+=-g -Wall -MMD -MF $(OBJDIR)/$(@F).d
-  CFLAGS += -Wextra
-  CFLAGS += -Wno-sign-compare
-  CFLAGS += -Wno-missing-field-initializers
-  CFLAGS += -Wundef -Wuninitialized
-  CFLAGS += -Wunused -Wno-unused-parameter
-  CFLAGS += -Wwrite-strings
-  CFLAGS += -Wchar-subscripts -funsigned-char
-  CFLAGS += -MMD -MF $(OBJDIR)/$(@F).d
-  ifdef CONFIG_DEFAULT_AR
-    AR=$(CROSS_PREFIX)ar
-  else
-    ifdef CONFIG_LTO
-      AR=$(CROSS_PREFIX)llvm-ar
-    else
-      AR=$(CROSS_PREFIX)ar
-    endif
-  endif
-  LIB_FUZZING_ENGINE ?= "-fsanitize=fuzzer"
+  	HOST_CC=clang
+  	CC=$(CROSS_PREFIX)clang
+  	CFLAGS+=-MMD -MF $(OBJDIR)/$(@F).d
+  	CFLAGS += -MMD -MF $(OBJDIR)/$(@F).d
+  	ifdef CONFIG_DEFAULT_AR
+    	AR=$(CROSS_PREFIX)ar
+  	else
+    	ifdef CONFIG_LTO
+      		AR=$(CROSS_PREFIX)llvm-ar
+    	else
+      		AR=$(CROSS_PREFIX)ar
+    	endif
+  	endif
+  	LIB_FUZZING_ENGINE ?= "-fsanitize=fuzzer"
 else ifdef CONFIG_COSMO
-  CONFIG_LTO=
-  HOST_CC=gcc
-  CC=cosmocc
+  	CONFIG_LTO=
+  	HOST_CC=gcc
+  	CC=cosmocc
   # cosmocc does not correct support -MF
-  CFLAGS=-g -Wall #-MMD -MF $(OBJDIR)/$(@F).d
-  CFLAGS += -Wno-array-bounds -Wno-format-truncation
-  AR=cosmoar
+  	CFLAGS= #-MMD -MF $(OBJDIR)/$(@F).d
+  	AR=cosmoar
 else
-  HOST_CC=gcc
-  CC=$(CROSS_PREFIX)gcc
-  CFLAGS+=-g -Wall -MMD -MF $(OBJDIR)/$(@F).d
-  CFLAGS += -Wno-array-bounds -Wno-format-truncation -Wno-infinite-recursion
-  ifdef CONFIG_LTO
-    AR=$(CROSS_PREFIX)gcc-ar
-  else
-    AR=$(CROSS_PREFIX)ar
-  endif
+  	HOST_CC=gcc
+  	CC=$(CROSS_PREFIX)gcc
+  	CFLAGS+=-MMD -MF $(OBJDIR)/$(@F).d
+  	ifdef CONFIG_LTO
+    	AR=$(CROSS_PREFIX)gcc-ar
+  	else
+    	AR=$(CROSS_PREFIX)ar
+  	endif
 endif
 STRIP?=$(CROSS_PREFIX)strip
 ifdef CONFIG_M32
-CFLAGS+=-msse2 -mfpmath=sse # use SSE math for correct FP rounding
-ifndef CONFIG_WIN32
-CFLAGS+=-m32
-LDFLAGS+=-m32
-endif
+	CFLAGS+=-msse2 -mfpmath=sse # use SSE math for correct FP rounding
+	ifndef CONFIG_WIN32
+		CFLAGS+=-m32
+		LDFLAGS+=-m32
+	endif
 endif
 CFLAGS+=-fwrapv # ensure that signed overflows behave as expected
-ifdef CONFIG_WERROR
-CFLAGS+=-Werror
-endif
 DEFINES:=-D_GNU_SOURCE -DCONFIG_VERSION=\"$(shell cat VERSION)\"
 ifdef CONFIG_WIN32
-DEFINES+=-D__USE_MINGW_ANSI_STDIO # for standard snprintf behavior
+	DEFINES+=-D__USE_MINGW_ANSI_STDIO # for standard snprintf behavior
 endif
 ifndef CONFIG_WIN32
-ifeq ($(shell $(CC) -o /dev/null compat/test-closefrom.c 2>/dev/null && echo 1),1)
-DEFINES+=-DHAVE_CLOSEFROM
-endif
+	ifeq ($(shell $(CC) -o /dev/null compat/test-closefrom.c 2>/dev/null && echo 1),1)
+		DEFINES+=-DHAVE_CLOSEFROM
+	endif
 endif
 
 CFLAGS+=$(DEFINES)
-CFLAGS_DEBUG=$(CFLAGS) -O0
-CFLAGS_SMALL=$(CFLAGS) -Os
-CFLAGS_OPT=$(CFLAGS) -O2
+CFLAGS_DEBUG=$(CFLAGS)
+CFLAGS_SMALL=$(CFLAGS)
+CFLAGS_OPT=$(CFLAGS)
 CFLAGS_NOLTO:=$(CFLAGS_OPT)
 ifdef CONFIG_COSMO
-LDFLAGS+=-s # better to strip by default
+	LDFLAGS+=-s # better to strip by default
 else
-LDFLAGS+=-g
+	LDFLAGS+=-g
 endif
 ifdef CONFIG_LTO
-CFLAGS_SMALL+=-flto
-CFLAGS_OPT+=-flto
-LDFLAGS+=-flto
+	CFLAGS_SMALL+=-flto
+	CFLAGS_OPT+=-flto
+	LDFLAGS+=-flto
 endif
 ifdef CONFIG_PROFILE
-CFLAGS+=-p
-LDFLAGS+=-p
+	CFLAGS+=-p
+	LDFLAGS+=-p
 endif
 ifdef CONFIG_ASAN
-CFLAGS+=-fsanitize=address -fno-omit-frame-pointer
-LDFLAGS+=-fsanitize=address -fno-omit-frame-pointer
+	CFLAGS+=-fsanitize=address -fno-omit-frame-pointer
+	LDFLAGS+=-fsanitize=address -fno-omit-frame-pointer
 endif
 ifdef CONFIG_MSAN
-CFLAGS+=-fsanitize=memory -fno-omit-frame-pointer
-LDFLAGS+=-fsanitize=memory -fno-omit-frame-pointer
+	CFLAGS+=-fsanitize=memory -fno-omit-frame-pointer
+	LDFLAGS+=-fsanitize=memory -fno-omit-frame-pointer
 endif
 ifdef CONFIG_UBSAN
-CFLAGS+=-fsanitize=undefined -fno-omit-frame-pointer
-LDFLAGS+=-fsanitize=undefined -fno-omit-frame-pointer
+	CFLAGS+=-fsanitize=undefined -fno-omit-frame-pointer
+	LDFLAGS+=-fsanitize=undefined -fno-omit-frame-pointer
 endif
 ifdef CONFIG_WIN32
-LDEXPORT=
+	LDEXPORT=
 else
-LDEXPORT=-rdynamic
+	LDEXPORT=-rdynamic
 endif
 
 ifndef CONFIG_COSMO
-ifndef CONFIG_DARWIN
-ifndef CONFIG_WIN32
-CONFIG_SHARED_LIBS=y # building shared libraries is supported
-endif
-endif
+	ifndef CONFIG_DARWIN
+		ifndef CONFIG_WIN32
+			CONFIG_SHARED_LIBS=y # building shared libraries is supported
+		endif
+	endif
 endif
 
 PROGS=qjs$(EXE) qjsc$(EXE) run-test262$(EXE)
 
 ifneq ($(CROSS_PREFIX),)
-QJSC_CC=gcc
-QJSC=./host-qjsc
-PROGS+=$(QJSC)
+	QJSC_CC=gcc
+	QJSC=./host-qjsc
+	PROGS+=$(QJSC)
 else
-QJSC_CC=$(CC)
-QJSC=./qjsc$(EXE)
+	QJSC_CC=$(CC)
+	QJSC=./qjsc$(EXE)
 endif
 PROGS+=libquickjs.a
 ifdef CONFIG_LTO
-PROGS+=libquickjs.lto.a
+	PROGS+=libquickjs.lto.a
 endif
 
 # examples
 ifeq ($(CROSS_PREFIX),)
-ifndef CONFIG_ASAN
-ifndef CONFIG_MSAN
-ifndef CONFIG_UBSAN
-PROGS+=examples/hello examples/test_fib
+	ifndef CONFIG_ASAN
+		ifndef CONFIG_MSAN
+			ifndef CONFIG_UBSAN
+				PROGS+=examples/hello examples/test_fib
 # no -m32 option in qjsc
-ifndef CONFIG_M32
-ifndef CONFIG_WIN32
-PROGS+=examples/hello_module
-endif
-endif
-ifdef CONFIG_SHARED_LIBS
-PROGS+=examples/fib.so examples/point.so
-endif
-endif
-endif
-endif
+				ifndef CONFIG_M32
+					ifndef CONFIG_WIN32
+						PROGS+=examples/hello_module
+					endif
+				endif
+				ifdef CONFIG_SHARED_LIBS
+					PROGS+=examples/fib.so examples/point.so
+				endif
+			endif
+		endif
+	endif
 endif
 
 all: $(OBJDIR) $(OBJDIR)/quickjs.check.o $(OBJDIR)/qjs.check.o $(PROGS)
@@ -250,7 +211,7 @@ QJS_OBJS=$(OBJDIR)/qjs.o $(OBJDIR)/repl.o $(QJS_LIB_OBJS)
 HOST_LIBS=-lm -ldl -lpthread
 LIBS=-lm -lpthread
 ifndef CONFIG_WIN32
-LIBS+=-ldl
+	LIBS+=-ldl
 endif
 LIBS+=$(EXTRA_LIBS)
 
@@ -287,7 +248,7 @@ endif #CROSS_PREFIX
 
 QJSC_DEFINES:=-DCONFIG_CC=\"$(QJSC_CC)\" -DCONFIG_PREFIX=\"$(PREFIX)\"
 ifdef CONFIG_LTO
-QJSC_DEFINES+=-DCONFIG_LTO
+	QJSC_DEFINES+=-DCONFIG_LTO
 endif
 QJSC_HOST_DEFINES:=-DCONFIG_CC=\"$(HOST_CC)\" -DCONFIG_PREFIX=\"$(PREFIX)\"
 
@@ -295,9 +256,9 @@ $(OBJDIR)/qjsc.o: CFLAGS+=$(QJSC_DEFINES)
 $(OBJDIR)/qjsc.host.o: CFLAGS+=$(QJSC_HOST_DEFINES)
 
 ifdef CONFIG_LTO
-LTOEXT=.lto
+	LTOEXT=.lto
 else
-LTOEXT=
+	LTOEXT=
 endif
 
 libquickjs$(LTOEXT).a: $(QJS_LIB_OBJS)
