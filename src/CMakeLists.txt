@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.23)
+
+file(READ "${CMAKE_SOURCE_DIR}/../Version.txt" QuickJS_VERSION)
+string(STRIP "${QuickJS_VERSION}" QuickJS_VERSION)
+message(STATUS "QuickJS v${QuickJS_VERSION}")
+
 project(QuickJS
-    VERSION 0.26.0106
+    VERSION ${QuickJS_VERSION}
     LANGUAGES C
 )
 #-------------- configuration --------------

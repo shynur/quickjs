@@ -27,6 +27,7 @@ target_sources(quickjs
         FILE_SET HEADERS
         FILES
             quickjs.h
+            quickjs-libc.h
 )
 
 target_link_libraries(quickjs
