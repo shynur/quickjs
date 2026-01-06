@@ -5,3 +5,10 @@ examples/hello
 examples/hello_module
 examples/hello.exe
 examples/test_fib.exe
+
+?*~
+\#?*#
+.#?*#
+
+/build/
+/install/
