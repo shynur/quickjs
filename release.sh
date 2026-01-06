@@ -118,7 +118,7 @@ fi
 # Cosmopolitan binary release
 
 if echo $release_list | grep -w -q cosmo_binary; then
-    export PATH+=~/cosmocc/bin
+    export PATH+=:~/cosmocc/bin
 
     d=quickjs-cosmo-$version
     outdir=/tmp/$d

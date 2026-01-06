@@ -12,3 +12,4 @@ examples/test_fib.exe
 
 /build/
 /install/
+CMakeUserPresets.json

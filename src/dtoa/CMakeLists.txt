@@ -1,4 +1,4 @@
-add_library(dtoa)
+add_library(dtoa OBJECT)
 
 target_sources(dtoa
     PRIVATE
@@ -15,7 +15,12 @@ target_link_libraries(dtoa
         m
 )
 
-install(
+#[[ install(
     TARGETS  dtoa
     FILE_SET HEADERS
+) ]]
+
+set_target_properties(dtoa
+    PROPERTIES
+        POSITION_INDEPENDENT_CODE TRUE
 )

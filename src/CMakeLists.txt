@@ -16,6 +16,8 @@ if(MINGW)
         __USE_MINGW_ANSI_STDIO
     )
 endif()
+# -------------- options --------------
+
 # ------------- subdirectories --------------
 add_subdirectory(cutils)
 add_subdirectory(dtoa)
@@ -25,3 +27,4 @@ add_subdirectory(libunicode)
 add_subdirectory(quickjs)
 add_subdirectory(qjs)
 add_subdirectory(qjsc)
+#add_subdirectory(run-test262)

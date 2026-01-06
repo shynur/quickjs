@@ -6,3 +6,8 @@ target_sources(cutils
     PUBLIC
         FILE_SET HEADERS
 )
+
+set_target_properties(cutils
+    PROPERTIES
+        POSITION_INDEPENDENT_CODE TRUE
+)

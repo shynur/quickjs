@@ -1,4 +1,4 @@
-add_library(regexp)
+add_library(regexp OBJECT)
 
 target_sources(regexp
     PRIVATE
@@ -14,7 +14,12 @@ target_link_libraries(regexp
         unicode
 )
 
-install(
+#[[ install(
     TARGETS  regexp
     FILE_SET HEADERS
+) ]]
+
+set_target_properties(regexp
+    PROPERTIES
+        POSITION_INDEPENDENT_CODE TRUE
 )

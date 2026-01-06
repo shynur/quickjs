@@ -1,0 +1,15 @@
+{
+    "version": 4,
+    "configurePresets": [
+        {
+            "name": "dev",
+            "binaryDir": "${sourceParentDir}/build",
+            "installDir": "install",
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": "OFF",
+                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON",
+				"CMAKE_BUILD_TYPE": "RelWithMinSize"
+            }
+        }
+    ]
+}
