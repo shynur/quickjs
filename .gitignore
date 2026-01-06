@@ -13,3 +13,5 @@ examples/test_fib.exe
 /build/
 /install/
 CMakeUserPresets.json
+
+.dir-locals-2.el

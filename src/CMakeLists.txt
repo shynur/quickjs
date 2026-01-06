@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 project(QuickJS
-    VERSION 0.26.0105
+    VERSION 0.26.0106
     LANGUAGES C
 )
 #-------------- configuration --------------

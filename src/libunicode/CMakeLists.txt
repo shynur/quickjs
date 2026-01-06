@@ -5,7 +5,7 @@ target_sources(unicode
         libunicode.c
     PUBLIC
         FILE_SET HEADERS
-        FILES libunicode.h
+        #FILES libunicode.h
 )
 
 target_link_libraries(unicode

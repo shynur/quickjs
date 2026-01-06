@@ -5,7 +5,7 @@ target_sources(dtoa
         dtoa.c
     PUBLIC
         FILE_SET HEADERS
-        FILES    dtoa.h
+        #FILES    dtoa.h
 )
 
 target_link_libraries(dtoa

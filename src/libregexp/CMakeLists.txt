@@ -5,7 +5,7 @@ target_sources(regexp
         libregexp.c
     PUBLIC
         FILE_SET HEADERS
-        FILES libregexp.h
+        #FILES libregexp.h
 )
 
 target_link_libraries(regexp

@@ -11,6 +11,7 @@ dev:
 .PHONY: clean
 clean:
 	rm -rf build install
+	rm -f ./**/?*~ ./**/.?*~ ./**/\#?*\# ./**/.\#?*\#
 
 %/:
 	mkdir -p $@
