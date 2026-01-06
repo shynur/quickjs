@@ -1,16 +1,12 @@
 # JFrog Conan v1.66
 
 import os, sys
-import conan, conan.tools.cmake
+import conan, conan.tools.cmake, conan.tools.files
 
 class QuickJSConan(conan.ConanFile):
     print(f'RUNNING {__file__} @ {os.getcwd()}', file=sys.stderr)
 
     name = 'QuickJS'
-    version = open(
-        next(p for p in (f'{d}/Version.txt' for d in ['.', '../export_source']) if os.path.exists(p)),
-        mode='r', encoding='utf-8'
-    ).read().strip()
 
     #license = ''
     #author = ''
@@ -29,6 +25,14 @@ class QuickJSConan(conan.ConanFile):
     }
 
     exports_sources = 'Version.txt', 'src/*'
+
+    def set_version(self):
+        self.version = conan.tools.files.load(
+            self,
+            'Version.txt' #next(
+            #    p for p in (f'{d}/Version.txt' for d in ['.', '../export_source']) if os.path.exists(p)
+            #)
+        )
 
     def config_options(self):
         if self.settings.os == 'Windows':

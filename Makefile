@@ -10,6 +10,8 @@ dev:
 
 .PHONY: upload
 upload:
+	rm -rf ~/.conan/data/QuickJS/*/shynur/dev
+	conan create . shynur/dev
 	conan upload --parallel -c --force --all -r my QuickJS/\*@shynur/dev
 
 .PHONY: clean
