@@ -8,8 +8,8 @@ class QuickJSConan(conan.ConanFile):
 
     name = 'QuickJS'
 
-    #license = ''
-    #author = ''
+    license = 'MIT'
+    author = 'Fabrice Bellard', 'Charlie Gordon'
     url = 'https://github.com/shynur/quickjs'
     #description = ''
     topics = 'js', 'javascript', 'es2023', 'es2024', 'ECMAScript', 'interpreter', 'embedded'
