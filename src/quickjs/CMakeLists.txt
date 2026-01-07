@@ -7,7 +7,9 @@ if(NOT WIN32)
     check_source_compiles(C
         [[
             #include <unistd.h>
-            int main() {closefrom(3);}
+            int main() {
+                closefrom(3);
+            }
         ]]
         HAVE_CLOSEFROM
     )
