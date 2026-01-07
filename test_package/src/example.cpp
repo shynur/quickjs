@@ -1,7 +1,5 @@
 #include <iostream>
-#include <quickjs.h>
-#include <quickjs-libc.h>
-using namespace std::literals;
+#include <quickjsxx.hpp>
 
 #ifdef _WIN32
 __declspec(dllexport)
@@ -14,34 +12,12 @@ static auto _nothing = [] {
 }();
 
 int main() {
-    const auto rt = ::JS_NewRuntime();
-    if (!rt) {
-        std::cerr << "Failed to create JSRuntime\n";
-        return 1;
-    }
+    const auto ctx = quickjsxx::Context{std::make_shared<quickjsxx::Runtime>()};
 
-    const auto ctx = ::JS_NewContext(rt);
-    if (!ctx) {
-        std::cerr << "Failed to create JSContext\n";
-        ::JS_FreeRuntime(rt);
-        return 1;
-    }
-    ::js_std_add_helpers(ctx, 0, nullptr);
+    const auto result = ctx.Eval(R"(console.log('Hello, world!'))"sv);
 
-    const auto code = R"(console.log('Hello, world!'))"s;
-    const auto result = ::JS_Eval(
-        ctx,
-        code.c_str(), code.length(),
-        "<input>",
-        JS_EVAL_TYPE_GLOBAL
-    );
-
-    if (::JS_IsException(result))
-        ::js_std_dump_error(ctx);
-
-    ::JS_FreeValue(ctx, result);
-    ::JS_FreeContext(ctx);
-    ::JS_FreeRuntime(rt);
+    //if (::JS_IsException(result))
+      //  ::js_std_dump_error(ctx);
 }
 
 void print_pkg_info() {
