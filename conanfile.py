@@ -11,7 +11,10 @@ class QuickJSConan(conan.ConanFile):
     license = 'MIT'
     author = 'Fabrice Bellard', 'Charlie Gordon'
     url = 'https://github.com/shynur/quickjs'
-    #description = ''
+    description = '''
+        QuickJS is a small and embeddable Javascript engine.
+        It supports most of the ES2024 specification.
+    '''
     topics = 'js', 'javascript', 'es2023', 'es2024', 'ECMAScript', 'interpreter', 'embedded'
 
     settings = 'os', 'compiler', 'build_type', 'arch'
