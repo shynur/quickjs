@@ -19,7 +19,9 @@ target_link_libraries(regexp
     FILE_SET HEADERS
 ) ]]
 
-set_target_properties(regexp
-    PROPERTIES
-        POSITION_INDEPENDENT_CODE TRUE
-)
+if(BUILD_SHARED_LIBS)
+    set_target_properties(regexp
+        PROPERTIES
+            POSITION_INDEPENDENT_CODE TRUE
+    )
+endif()

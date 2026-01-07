@@ -19,7 +19,7 @@ add_compile_definitions(
 if(MINGW)
     add_compile_definitions(
         __USE_MINGW_ANSI_STDIO
-    )
+    )  # for standard snprintf behavior
 endif()
 # -------------- options --------------
 

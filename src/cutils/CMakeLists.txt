@@ -7,7 +7,9 @@ target_sources(cutils
         FILE_SET HEADERS
 )
 
-set_target_properties(cutils
-    PROPERTIES
-        POSITION_INDEPENDENT_CODE TRUE
-)
+if(BUILD_SHARED_LIBS)
+    set_target_properties(cutils
+        PROPERTIES
+            POSITION_INDEPENDENT_CODE TRUE
+    )
+endif()

@@ -18,7 +18,9 @@ target_link_libraries(unicode
     FILE_SET HEADERS
 ) ]]
 
-set_target_properties(unicode
-    PROPERTIES
-        POSITION_INDEPENDENT_CODE TRUE
-)
+if(BUILD_SHARED_LIBS)
+    set_target_properties(unicode
+        PROPERTIES
+            POSITION_INDEPENDENT_CODE TRUE
+    )
+endif()

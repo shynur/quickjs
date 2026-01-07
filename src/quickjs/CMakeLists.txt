@@ -39,7 +39,14 @@ target_link_libraries(quickjs
         unicode
     PUBLIC
         m
+        pthread
 )
+if(NOT WIN32)
+    target_link_libraries(quickjs
+        PUBLIC
+            dl
+    )
+endif()
 # ------------- install --------------
 install(
     TARGETS
