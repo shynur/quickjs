@@ -1,8 +1,6 @@
 add_library(quickjs)
 add_library(QuickJS::quickjs ALIAS quickjs)
 # -------------- checks --------------
-include(CheckSourceCompiles)
-
 if(NOT WIN32)
     check_source_compiles(C
         [[
@@ -58,25 +56,8 @@ install(
     FILE_SET HEADERS
 )
 
-include(GNUInstallDirs)
-
 install(
        EXPORT QuickJSTargets
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QuickJS
     NAMESPACE QuickJS::
-)
-
-install(
-    FILES cmake/QuickJSConfig.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QuickJS
-)
-
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-    ${CMAKE_CURRENT_BINARY_DIR}/QuickJSConfigVersion.cmake
-    COMPATIBILITY ExactVersion
-)
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/QuickJSConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QuickJS
 )
