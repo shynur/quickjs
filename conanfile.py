@@ -58,4 +58,10 @@ class QuickJSConan(conan.ConanFile):
         cmake.install()
 
     def package_info(self):
-        self.cpp_info.libs = ["quickjs"]
+        self.cpp_info.set_property("cmake_file_name", "QuickJS")
+
+        self.cpp_info.components["quickjs"].set_property("cmake_target_name", "QuickJS::quickjs")
+        self.cpp_info.components["quickjs"].libs = ["quickjs"]
+
+        self.cpp_info.components["quickjsxx"].set_property("cmake_target_name", "QuickJS::quickjsxx")
+        self.cpp_info.components["quickjsxx"].requires = ["quickjs"]

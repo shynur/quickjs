@@ -12,7 +12,7 @@ static auto _nothing = [] {
 }();
 
 int main() {
-    const auto ctx = quickjsxx::Context{std::make_shared<quickjsxx::Runtime>()};
+    const auto ctx = quickjsxx::Context{quickjsxx::Runtime::Create()};
 
     const auto result = ctx.Eval(R"(console.log('Hello, world!'))"sv);
 

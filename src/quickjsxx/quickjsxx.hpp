@@ -18,7 +18,9 @@ class Runtime: std::enable_shared_from_this<Runtime> {
         std::remove_pointer_t<decltype(::JS_NewRuntime())> *const prt;
         friend Context;
 
-        Runtime(): prt{[] {
+        struct consTag{explicit consTag() = default;};
+    public:
+        Runtime(consTag): prt{[] {
             const auto prt = ::JS_NewRuntime();
             if (!prt)
                 throw std::runtime_error{"Failed to create QuickJS runtime"};
@@ -26,6 +28,10 @@ class Runtime: std::enable_shared_from_this<Runtime> {
         }()} {}
         ~Runtime() {
             ::JS_FreeRuntime(this->prt);
+        }
+
+        static auto Create() {
+            return std::make_shared<Runtime>(consTag{});
         }
 };
 
@@ -47,15 +53,7 @@ class Context {
             ::JS_FreeContext(this->pctx);
         }
 
-        auto Eval(const std::string_view code) const {
-            const auto val = ::JS_Eval(
-                this->pctx,
-                code.data(), code.length(),
-                "<input>",
-                JS_EVAL_TYPE_GLOBAL
-            );
-            return Value{val};
-        }
+        auto Eval(const std::string_view code) const;
 };
 
 class Value {
@@ -71,5 +69,15 @@ class Value {
             ::JS_FreeValue(NULL, this->val);
         }
 };
+
+inline auto Context::Eval(const std::string_view code) const {
+    const auto val = ::JS_Eval(
+        this->pctx,
+        code.data(), code.length(),
+        "<input>",
+        JS_EVAL_TYPE_GLOBAL
+    );
+    return Value{val};
+}
 
 %>

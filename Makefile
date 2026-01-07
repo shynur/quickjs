@@ -16,6 +16,7 @@ upload:
 
 .PHONY: clean
 clean:
+	cd test_package; $(MAKE) clean
 	rm -rf tmp
 	rm -rf build install
 	rm -f ./**/?*~ ./**/.?*~ ./**/#?*# ./**/.#?*#
