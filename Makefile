@@ -18,7 +18,7 @@ upload:
 clean:
 	rm -rf tmp
 	rm -rf build install
-	rm -f ./**/?*~ ./**/.?*~ ./**/\#?*\# ./**/.\#?*\#
+	rm -f ./**/?*~ ./**/.?*~ ./**/#?*# ./**/.#?*#
 
 %/:
 	mkdir -p $@
