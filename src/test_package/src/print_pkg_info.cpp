@@ -1,6 +1,13 @@
 #include <iostream>
 #include "print_pkg_info.hpp"
 
+namespace <%
+    const auto _nothing [[maybe_unused]] = [] {
+        print_pkg_info();
+        return 0;
+    }();
+%>
+
 void print_pkg_info() {
     #ifdef NDEBUG
     std::cout << "QuickJS: Hello World Release!\n";
