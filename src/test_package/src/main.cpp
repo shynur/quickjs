@@ -4,9 +4,9 @@
 #include "script.hpp"
 
 int main() {
-    const auto ctx = quickjsxx::Context{quickjsxx::Runtime::Create()};
+    const auto realm = quickjsxx::Realm{quickjsxx::Runtime::Create()};
 
-    const auto result = ctx.Eval(code);
+    const auto result = realm.Eval(code);
 
     //if (::JS_IsException(result))
       //  ::js_std_dump_error(ctx);

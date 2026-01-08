@@ -1,17 +1,17 @@
 #pragma once
-#include "quickjs.h"
-#include "quickjs-libc.h"
 #include <string>
 #include <type_traits>
 #include <stdexcept>
 #include <memory>
 using namespace std::literals;
-
+#include "quickjs.h"
+#include "quickjs-libc.h"
 
 namespace quickjsxx <%
 
 class Runtime;
 class Context;
+using Realm = Context;
 class Value;
 
 class Runtime: std::enable_shared_from_this<Runtime> {
@@ -42,10 +42,24 @@ class Value {
         friend Context;
     public:
         Value(const Value&);
+        friend void swap(Value&, Value&);
+        auto& operator=(Value);
         ~Value();
 };
 
 %>
+
+inline
+auto& quickjsxx::Value::operator=(Value other) {
+    swap(*this, other);
+    return *this;
+}
+
+inline
+void quickjsxx::swap(Value& a, Value& b) {
+    using std::swap;
+    swap(a.val, b.val);
+}
 
 inline
 quickjsxx::Value::~Value() {
