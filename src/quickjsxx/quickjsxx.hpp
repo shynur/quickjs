@@ -67,10 +67,16 @@ quickjsxx::Value::~Value() {
 }
 
 inline
-quickjsxx::Value::Value(const Value& other): val{::JS_DupValue(NULL, other.val)} {}
+quickjsxx::Value::Value(const Value& other):
+val{
+    ::JS_DupValue(NULL, other.val)
+} {}
 
 inline
-quickjsxx::Value::Value(::JSValue val): val{val} {}
+quickjsxx::Value::Value(::JSValue val):
+val{
+    val
+} {}
 
 inline
 quickjsxx::Context::~Context() {
@@ -89,19 +95,20 @@ auto quickjsxx::Context::Eval(const std::string_view code) const -> quickjsxx::V
 }
 
 inline
-quickjsxx::Context::Context(const std::shared_ptr<Runtime> rt)
-: rt{rt},
-  pctx{[this] {
+quickjsxx::Context::Context(const std::shared_ptr<Runtime> rt):
+rt{rt},
+pctx{[this] {
     const auto pctx = ::JS_NewContext(this->rt->prt);
         if (!pctx)
             throw std::runtime_error{"Failed to create QuickJS context"};
         return pctx;
-  }()} {
+}()} {
     ::js_std_add_helpers(this->pctx, 0, NULL);
 }
 
 inline
-quickjsxx::Runtime::Runtime(): prt{[] {
+quickjsxx::Runtime::Runtime():
+prt{[] {
     const auto prt = ::JS_NewRuntime();
     if (!prt)
         throw std::runtime_error{"Failed to create QuickJS runtime"};
