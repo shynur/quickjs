@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 # ------------- project --------------
-file(READ "${CMAKE_SOURCE_DIR}/../Version.txt" QuickJS_VERSION)
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/version.txt" QuickJS_VERSION)
 string(STRIP "${QuickJS_VERSION}" QuickJS_VERSION)
 message(STATUS "QuickJS v${QuickJS_VERSION}")
 
@@ -36,8 +36,12 @@ add_subdirectory(dtoa)
 add_subdirectory(libregexp)
 add_subdirectory(libunicode)
 add_subdirectory(quickjs)
-add_subdirectory(qjs)
-add_subdirectory(qjsc)
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/qjs/")
+    add_subdirectory(qjs)
+endif()
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/qjsc/")
+    add_subdirectory(qjsc)
+endif()
 #add_subdirectory(run-test262)
 add_subdirectory(quickjsxx)
 # ------------- install ---------------

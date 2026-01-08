@@ -11,12 +11,13 @@ dev:
 .PHONY: upload
 upload:
 	rm -rf ~/.conan/data/QuickJS/*/shynur/dev
-	conan create . shynur/dev
+	cd src; conan create . shynur/dev
+	# ^^^^^ It have to be written this way otherwise (conan create src) conan can't find 'version.txt'.
 	conan upload --parallel -c --force --all -r my QuickJS/\*@shynur/dev
 
 .PHONY: clean
 clean:
-	cd test_package; $(MAKE) clean
+	cd src/test_package; $(MAKE) clean
 	rm -rf tmp
 	rm -rf build install
 	rm -f ./**/?*~ ./**/.?*~ ./**/#?*# ./**/.#?*#

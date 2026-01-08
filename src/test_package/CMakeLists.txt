@@ -4,7 +4,11 @@ project(PackageTest CXX)
 add_executable(example)
 target_sources(example
     PRIVATE
-        src/example.cpp
+        src/main.cpp
+        src/print_pkg_info.cpp
+    PRIVATE
+        FILE_SET  HEADERS
+        BASE_DIRS include
 )
 target_link_libraries(example
     PRIVATE

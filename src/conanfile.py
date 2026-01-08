@@ -27,12 +27,17 @@ class QuickJSConan(conan.ConanFile):
         'fPIC': True,
     }
 
-    exports_sources = 'Version.txt', 'src/*'
+    exports_sources = (
+        'version.txt', 'CMakeLists.txt',
+        'cmake/*',
+        'cutils/*', 'dtoa/*', 'libregexp/*', 'libunicode/*', 'list/*',
+        'quickjs/*', 'quickjsxx/*',
+    )
 
     def set_version(self):
         self.version = conan.tools.files.load(
             self,
-            'Version.txt' #next(
+            'version.txt' #next(
             #    p for p in (f'{d}/Version.txt' for d in ['.', '../export_source']) if os.path.exists(p)
             #)
         )
@@ -42,7 +47,7 @@ class QuickJSConan(conan.ConanFile):
             del self.options.fPIC
 
     def layout(self):
-        conan.tools.cmake.cmake_layout(self, src_folder='src')
+        conan.tools.cmake.cmake_layout(self, src_folder='.')
 
     def generate(self):
         tc = conan.tools.cmake.CMakeToolchain(self)
