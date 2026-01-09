@@ -15,9 +15,14 @@ upload:
 	# ^^^^^ It have to be written this way otherwise (conan create src) conan can't find 'version.txt'.
 	conan upload --parallel -c --force --all -r my QuickJS/\*@shynur/dev
 
+.PHONY: doc
+doc:
+	cd doc/info; $(MAKE)
+
 .PHONY: clean
 clean:
 	cd src/test_package; $(MAKE) clean
+	cd doc/info; $(MAKE) clean
 	rm -rf tmp
 	rm -rf build install
 	rm -f ./**/?*~ ./**/.?*~ ./**/#?*# ./**/.#?*#
