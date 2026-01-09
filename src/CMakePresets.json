@@ -8,7 +8,7 @@
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": "OFF",
                 "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON",
-				"CMAKE_BUILD_TYPE": "RelWithMinSize"
+				"CMAKE_BUILD_TYPE": "Release"
             }
         }
     ]

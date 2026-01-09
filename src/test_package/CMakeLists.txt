@@ -22,7 +22,6 @@ target_sources(example
 )
 target_link_libraries(example
     PRIVATE
-        stdc++
         QuickJS::quickjsxx
 )
 if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
@@ -32,8 +31,17 @@ if(CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "GNU")
             -Wall
             -Wextra
             -Wpedantic
-            -Wno-c23-extensions
     )
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        target_link_libraries(example
+            PRIVATE
+                stdc++
+        )
+        target_compile_options(example
+            PRIVATE
+                -Wno-c23-extensions
+        )
+    endif()
 endif()
 
 find_package(QuickJS CONFIG REQUIRED)
