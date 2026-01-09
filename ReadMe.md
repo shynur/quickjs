@@ -55,6 +55,7 @@ cmake --install build --prefix /usr/local
 
 ```bash
 cd src
+export CXX=g++-16  # Or other latest compiler.
 conan create . username/channel
 ```
 

@@ -6,9 +6,9 @@
             "binaryDir": "${sourceParentDir}/build",
             "installDir": "install",
             "cacheVariables": {
-                "BUILD_SHARED_LIBS": "OFF",
-                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON",
-				"CMAKE_BUILD_TYPE": "Release"
+                "BUILD_SHARED_LIBS": "ON",
+                "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "OFF",
+				"CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ]

@@ -6,7 +6,7 @@ message(STATUS "QuickJS v${QuickJS_VERSION}")
 
 project(QuickJS
     VERSION ${QuickJS_VERSION}
-    LANGUAGES C # 无需 CXX, 因为 quickjsxx 是 header-only 库.
+    LANGUAGES C  # No CXX because quickjsxx is a header-only library thus no need to build it.
 )
 # ------------- stdlib ---------------
 include(GNUInstallDirs)
