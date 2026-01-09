@@ -1,3 +1,13 @@
+/*
+ * Copyright (C) 2025-2026  Xie Qi
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, version 2.0.  If a copy of the MPL was not distributed with
+ * this file, You can obtain one at <http://mozilla.org/MPL/2.0/>.
+ */
+
+/* clang-format off */
+
 #pragma once
 #include <string>
 #include <type_traits>
