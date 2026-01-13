@@ -122,11 +122,11 @@ auto quickjsxx::Value::GetValue() const -> std::variant<
     }
 
     if (::JS_IsException(this->val)) {
-        throw std::runtime_error{"quickjsxx: JS Exception Value"};
+        throw std::runtime_error{"quickjsxx: Exception"};
     }
 
     if (::JS_IsUninitialized(this->val)) {
-        throw std::runtime_error{"quickjsxx: JS Uninitialized Value"};
+        throw std::runtime_error{"quickjsxx: Uninitialized Value"};
     }
 
     if (::JS_IsString(this->val)) {
@@ -140,7 +140,7 @@ auto quickjsxx::Value::GetValue() const -> std::variant<
     }
 
     if (::JS_IsSymbol(this->val)) {
-        throw std::runtime_error{"quickjsxx: JS Symbol Value"};
+        throw std::runtime_error{"quickjsxx: Symbol"};
     }
 
     if (::JS_IsObject(this->val)) {
