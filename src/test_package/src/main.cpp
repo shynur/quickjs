@@ -1,13 +1,27 @@
 #include <iostream>
 #include <quickjsxx.hpp>
+#include <print>
 #include "print_pkg_info.hpp"
 #include "script.hpp"
 
 int main() {
-    const auto realm = quickjsxx::Realm{quickjsxx::Runtime::Create()};
+    const auto ctx = quickjsxx::Context::Create(quickjsxx::Runtime::Create());
 
-    const auto result = realm.Eval(code);
+    std::cout << std::get<double>(ctx->Eval(R"( 2 )").GetValue()) << '\n';
 
-    //if (::JS_IsException(result))
-      //  ::js_std_dump_error(ctx);
+    std::cout << std::get<std::intmax_t>(ctx->Eval(R"( 996n )").GetValue()) << '\n';
+
+    ctx->Eval(R"( console.log('come from console.log') )");
+
+    std::cout << std::get<std::string>(ctx->Eval(R"( 'jjjjjjjjjj' )").GetValue()) << '\n';
+
+    auto promise = ctx->Eval(R"( 0, async function() {
+        await new Promise(r => setTimeout(r, 1000))
+        console.log(233)
+        return 42
+    }())");
+    promise.await();
+    std::cout << std::get<double>(promise.GetValue()) << '\n';
+
+    ctx->Eval(R"(  )");
 }

@@ -12,7 +12,7 @@ dev:
 upload:
 	rm -rf ~/.conan/data/QuickJS/*/shynur/dev
 	cd src; conan create . shynur/dev
-	# ^^^^^ It have to be written this way otherwise (conan create src) conan can't find 'version.txt'.
+	@# ^^^^^ It have to be written this way otherwise (conan create src) conan can't find 'version.txt'.
 	conan upload --parallel -c --force --all -r my QuickJS/\*@shynur/dev
 
 .PHONY: doc

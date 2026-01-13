@@ -16,4 +16,7 @@ CMakeUserPresets.json
 
 .dir-locals-2.el
 
+compile_commands.json
+
 /tmp/
+/.cache/
